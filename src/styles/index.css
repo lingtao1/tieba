@@ -1,0 +1,29 @@
+body {
+  background-color: #f5f5f8;
+}
+.van-popup__close-icon--top-left {
+  top: 8px;
+  left: 20px;
+  color: #fff;
+}
+[v-cloak] {
+  display: none;
+}
+.nav-bar {
+  background: #1989fa;
+}
+.nav-bar .van-nav-bar__title {
+  color: #fff;
+}
+.nav-bar /deep/ .van-nav-bar__text {
+  color: #fff;
+}
+.nav-bar /deep/ .van-icon {
+  color: #fff;
+}
+.van-toast--top {
+  top: 20% !important;
+}
+.van-list__finished-text {
+  font-size: 12px !important;
+}
