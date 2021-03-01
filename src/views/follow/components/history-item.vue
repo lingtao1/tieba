@@ -40,6 +40,9 @@ export default {
     font-size: 12px;
     color: #666;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .channel-synopsis {
     margin-top: 8px;

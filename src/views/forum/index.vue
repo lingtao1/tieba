@@ -164,6 +164,7 @@ export default {
       this.channelInfo.isFollow = !this.channelInfo.isFollow
     },
   },
+
   created() {
     this.loadChannelInfo()
   },
@@ -173,7 +174,7 @@ export default {
     })
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll)
+    // window.removeEventListener('scroll', this.handleScroll)
   },
 }
 </script>

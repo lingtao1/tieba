@@ -9,7 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: Cookies.get('token') || '', // 获取本地存储 判断用户是否登录
-    cachePages: ['layoutIndex']
+    cachePages: ['layoutIndex','detailIndex','forumIndex']
 
   },
   mutations: {
@@ -21,9 +21,8 @@ export default new Vuex.Store({
     addCachePage (state, pageName) {
       if (!state.cachePages.includes(pageName)) {
         state.cachePages.push(pageName)
-        console.log(1);
       }
-
+      console.log('add',state.cachePages);
     },
 
     // 移除缓存页面
@@ -32,6 +31,7 @@ export default new Vuex.Store({
       if (index !== -1) {
         state.cachePages.splice(index, 1)
       }
+      console.log('remove',state.cachePages);
     }
 
 

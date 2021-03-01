@@ -10,9 +10,9 @@
           v-if="channels.channelInfo"
           :icon="channels.channelInfo.image"
           :title="channels.channelInfo.name"
-          label="接口连接上来看"
+          :label="channels.channelInfo.synopsis"
           class="channel-banner"
-          @click="$router.push(`/forum/${list.channelInfo.id}`)"
+          @click="$router.push(`/forum/${channels.channelInfo.id}`)"
         />
         <div class="channel-order" v-if="channels.channelItem">
           <van-cell

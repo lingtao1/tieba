@@ -59,6 +59,7 @@ import detailContent from './components/detail-content'
 import { mapState } from 'vuex'
 import { getCommentList } from '@/api/comment'
 import { getDetail } from '@/api/detail'
+import { debounce } from 'lodash'
 
 export default {
   name: 'detailIndex',
@@ -84,6 +85,7 @@ export default {
       order: 'asc',
       isAll: true,
       reply_modular: false,
+      scrollTop: 0,
     }
   },
   methods: {
@@ -139,8 +141,18 @@ export default {
   created() {
     this.loadDetail()
   },
+  activated() {
+    this.$refs.comment.$el.scrollTop = this.scrollTop
+  },
+
   mounted() {
-    // this.$refs.comment.$el.addEventListener('scroll', this.handleScroll)
+    const comment = this.$refs.comment.$el
+    comment.addEventListener(
+      'scroll',
+      debounce(() => {
+        this.scrollTop = comment.scrollTop
+      })
+    )
   },
 }
 </script>
@@ -164,6 +176,12 @@ export default {
 }
 
 .comment-list {
+  position: fixed;
+  top: 46px;
+  bottom: 50px;
+  right: 0;
+  left: 0;
+  overflow-y: auto;
 }
 
 .footer-bar {

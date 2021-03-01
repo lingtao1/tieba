@@ -2,33 +2,33 @@
 <template>
   <div>
     <search-bar></search-bar>
-    <channels-history />
-    <channels-follow />
+    <div v-if="$store.state.user">
+      <channels-history />
+      <channels-follow />
 
-    <van-popup
-      :style="{ width: '100%', height: '100%' }"
-      v-model="isBuildshow"
-      closeable
-      close-icon-position="top-left"
-      lazy-render
-      position="right"
-    >
-      <build-channel
-        v-if="isBuildshow"
-        @onClose="isBuildshow = false"
-        @insertChannel="insertChannel"
-      ></build-channel>
-    </van-popup>
+      <van-image
+        :src="require('./add.jpg')"
+        round
+        class="channel-add"
+        @click="isBuildshow = true"
+      ></van-image>
+      <van-popup
+        :style="{ width: '100%', height: '100%' }"
+        v-model="isBuildshow"
+        closeable
+        close-icon-position="top-left"
+        lazy-render
+        position="right"
+      >
+        <build-channel
+          v-if="isBuildshow"
+          @onClose="isBuildshow = false"
+          @insertChannel="insertChannel"
+        ></build-channel>
+      </van-popup>
+    </div>
 
-    <!-- <van-cell class="channel-item" @click="isBuildshow = true">
-      <div slot="icon">
-        <van-image fit="cover" :src="require('./add.jpg')" />
-      </div>
-      <div slot="title">
-        <h1>创建吧</h1>
-        <p>创建吧、做吧主11111111</p>
-      </div>
-    </van-cell> -->
+    <not-logged-in v-else />
   </div>
 </template>
 
@@ -37,7 +37,7 @@ import buildChannel from './components/build-channel'
 import searchBar from '@/components/search-bar'
 import channelsFollow from './components/channels-follow'
 import channelsHistory from './components/channels-history'
-
+import notLoggedIn from '@/components/not-logged-in'
 export default {
   name: 'channel',
   components: {
@@ -45,6 +45,7 @@ export default {
     searchBar,
     channelsFollow,
     channelsHistory,
+    notLoggedIn,
   },
 
   data() {
@@ -62,11 +63,17 @@ export default {
     },
   },
 
-  created() {
-    console.log(1)
-  },
+  created() {},
   mounted() {},
 }
 </script>
 <style lang='less' scoped>
+.channel-add {
+  position: fixed;
+  top: 65%;
+  right: 5%;
+  background: red;
+  width: 50px;
+  height: 50px;
+}
 </style>

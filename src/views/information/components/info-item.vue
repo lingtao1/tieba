@@ -33,12 +33,16 @@
     </template>
 
     <div class="detail-info">
-      <van-image
-        lazy-load
-        class="detail-image"
-        :src="data.detail_images"
-        fit="cover"
-      />
+      <div class="detail-image">
+        <van-image
+          v-if="data.detail_images"
+          lazy-load
+          class="detail-image"
+          :src="data.detail_images"
+          fit="cover"
+        />
+      </div>
+
       <p class="reply" @click.stop="onClickComment(data.id, data.from_uname)">
         <van-icon name="comment-o" /> 回复
       </p>

@@ -49,8 +49,8 @@ export default {
   data() {
     return {
       loginInfo: {
-        username: null,
-        password: null,
+        username: 'lingtao1',
+        password: '123456',
       },
       formRoules: {
         username: [
