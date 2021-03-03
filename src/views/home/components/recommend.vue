@@ -11,14 +11,26 @@
       <detail-item
         v-for="(item, index) in list"
         :key="index"
-        :data="item"
-      ></detail-item>
+        :id="item.id"
+        :uid="item.user_id"
+        :cid="item.channel_id"
+        :avatar="item.user_image"
+        :name="item.user_name"
+        :time="item.createtime"
+        :title="item.title"
+        :content="item.content"
+        :images="item.images"
+        :commentnum="item.num"
+        :cname="item.channel_name"
+        :likenum="item.like_num"
+        :likestate="item.like_state"
+      />
     </van-list>
   </div>
 </template>
 
 <script>
-import detailItem from './detail-item'
+import detailItem from '@/components/detail-item'
 import { getRecommendList } from '@/api/detail'
 import { debounce } from 'lodash'
 

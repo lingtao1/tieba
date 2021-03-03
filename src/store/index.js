@@ -9,7 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     user: Cookies.get('token') || '', // 获取本地存储 判断用户是否登录
-    cachePages: ['layoutIndex','detailIndex','forumIndex']
+    cachePages: ['layoutIndex']
 
   },
   mutations: {

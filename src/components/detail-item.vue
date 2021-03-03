@@ -1,55 +1,68 @@
 
 <template>
-  <div class="detail-item">
-    <van-cell :border="false" @click="onClickToDetail(data.id)">
+  <div class="detail-item" @click="$router.push(`/detail/${id}`)">
+    <van-cell :border="false" >
       <van-image
         slot="icon"
         class="avatar"
         round
         fit="cover"
-        :src="data.image || 'https://img.yzcdn.cn/vant/cat.jpeg'"
-        @click.stop="$router.push(`/user/${data.user_id}`)"
+        :src="avatar"
+        @click.stop="$router.push(`/user/${uid}`)"
       />
-      <p slot="title" class="name">{{ data.name }}</p>
-      <p slot="label" class="RDate" v-show="data.createtime">
-        {{ data.createtime | relativeTime }}
+      <p slot="title" class="name">{{ name }}</p>
+      <p slot="label" class="RDate">
+        {{ time | relativeTime }}
       </p>
     </van-cell>
-    <div class="detail-content" @click="onClickToDetail(data.id)">
-      <p class="title">{{ data.title }}</p>
+    <div class="detail-content" >
+      <p class="title">{{ title }}</p>
       <p class="text">
-        {{ data.content }}
+        {{ content }}
       </p>
       <div class="images">
         <van-image
-          v-for="(item, index) in data.images"
+          v-for="(item, index) in images"
           :key="index"
           :src="item"
           lazy-load
           show-loading
           @click.stop="onClickImage(index)"
           class="image-item"
-          :class="data.images.length > 1 ? 'more' : 'only_one'"
+          :class="images.length > 1 ? 'more' : 'only_one'"
           fit="cover"
         />
       </div>
     </div>
-    <div class="ops">
+    <div v-if="cname" class="ops" >
+      <van-button
+        class="bar-name"
+        type="info"
+        size="mini"
+        @click.stop="$router.push(`/forum/${cid}`)"
+        >{{ cname }}</van-button
+      >
+      <div class="info">
+        <i class="chat" >
+          <van-icon name="chat-o" />
+          <span> {{ commentnum }}</span>
+        </i>
+        <i class="like" @click.stop="onClickLike">
+          <van-icon :name="likestate ? 'good-job' : 'good-job-o'" />
+          <span> {{ likenum || 0 }}</span>
+        </i>
+      </div>
+    </div>
+
+    <div  v-else class="ops" >
       <div class="ops-item iconfont" name="share-o">&#xe6d1;</div>
       <p class="ops-item ops-item-flex">
-        <span class="iconfont" @click="onClickToDetail(data.id)"
-          >&#xe609;
-        </span>
-        <span class="text">{{ data.comment_num }}</span>
+        <span class="iconfont">&#xe609; </span>
+        <span class="text">{{ commentnum }}</span>
       </p>
-      <p class="ops-item ops-item-flex icon-godjob">
-        <van-icon
-          @click="onClickLike(data.id)"
-          class="icon-godjob"
-          :name="data['like_state'] ? 'good-job' : 'good-job-o'"
-        >
-        </van-icon
-        ><span class="text">{{ data.like_num }}</span>
+      <p class="ops-item ops-item-flex icon-godjob" @click.stop="onClickLike">
+        <span class="iconfont">{{likestate ? '&#xe600' : '&#xe601'}} </span>
+        <span class="text">{{ likenum || 120 }}</span>
       </p>
     </div>
   </div>
@@ -62,24 +75,34 @@ import { ImagePreview } from 'vant'
 Vue.use(ImagePreview)
 
 export default {
-  props: ['data'],
+  props: {
+    data: Object,
+    id: Number,
+    uid: Number,
+    cid: Number,
+    avatar: String,
+    name: String,
+    time: String,
+    title: String,
+    content: String,
+    images: Array,
+    cname: String,
+    commentnum: Number,
+    likestate: Boolean,
+    likenum: Number,
+  },
   data() {
     return {}
   },
   methods: {
-    async onClickLike(id) {
-      await likeDetail({ id })
-
-      this.data['like_state']
-        ? this.data['like_num']--
-        : this.data['like_num']++
-      this.data['like_state'] = !this.data['like_state']
-    },
-    onClickToDetail(id) {
-      this.$router.push(`/detail/${id}`)
+    async onClickLike() {
+      console.log(1)
+      // await likeDetail({ id: this.id })
+      this.likestate ? this.likenum-- : this.likenum++
+      this.likestate = !this.likestate
     },
     onClickImage(index) {
-      ImagePreview({ images: this.data.images, startPosition: index })
+      ImagePreview({ images: this.images, startPosition: index })
     },
   },
   created() {},
@@ -92,6 +115,10 @@ export default {
   padding: 0 0 10px 0;
   border-radius: 8px;
   background: #fff;
+
+  .RDate {
+    margin-left: 5px;
+  }
   /deep/ .van-cell {
     background: unset;
   }
@@ -99,6 +126,7 @@ export default {
     width: 40px;
     height: 40px;
   }
+
   p {
     margin-left: 5px;
   }
@@ -130,38 +158,53 @@ export default {
         height: 120px;
       }
       .only_one {
-        width: 66%;
+        width: 100%;
         max-height: 250px;
       }
     }
   }
-
-  .ops {
+}
+.ops {
+  margin-top: 8px;
+  padding: 0 13px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 16px;
+  .bar-name {
+    background: rgba(0, 16, 235, 0.2);
+    color: #000;
+    border: 0;
+  }
+  .info {
+    margin-left: auto;
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin-top: 10px;
-    .ops-item {
-      flex: 1;
-      text-align: center;
-      font-size: 16px;
-      // font-weight: 300;
-    }
-    .ops-item-flex {
+    justify-content: center;
+
+    i {
       display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
-      .text {
-        padding-left: 5px;
-        font-size: 16px;
+      margin-left: 5px;
+      span {
+        margin-left: 2px;
       }
     }
-    .icon-godjob {
-      font-size: 20px;
-      .text {
-        padding-left: 1px;
-        font-size: 16px;
-      }
+  }
+
+  // no cname
+  .ops-item {
+    flex: 1;
+    text-align: center;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .text {
+      margin-left: 3px;
+      font-size: 15px;
     }
   }
 }

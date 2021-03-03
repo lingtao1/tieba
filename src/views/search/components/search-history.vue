@@ -4,28 +4,18 @@
     <h1 class="history-header" v-if="list.length > 0">
       <span>历史记录</span>
       <div class="edit">
-        <div v-if="isEidt">
-          <van-icon
-            class="icon-delete"
-            @click="deteleAllHistory"
-            name="delete-o"
-          />
-          <van-button
-            class="edit-btn"
-            type="default"
-            size="mini"
-            @click="isEidt = false"
-            >完成</van-button
-          >
-        </div>
-
+        <van-icon
+          class="icon-delete"
+          @click="deteleAllHistory"
+          name="delete-o"
+          v-show="isEidt"
+        />
         <van-button
-          v-else
           class="edit-btn"
           type="default"
           size="mini"
-          @click="isEidt = true"
-          >编辑</van-button
+          @click="isEidt = !isEidt"
+          >{{ isEidt ? '完成' : '编辑' }}</van-button
         >
       </div>
     </h1>
@@ -116,10 +106,18 @@ export default {
 <style lang='less' scoped>
 .search-history {
   padding: 10px;
+}
+.history-header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: normal;
+  font-size: 16px;
   .edit {
-    position: relative;
-    height: 10px;
-    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     .edit-btn {
       font-size: 12px;
       padding: 10px 5px;
@@ -128,19 +126,11 @@ export default {
       transform: scale(0.8);
     }
     .icon-delete {
+      margin-top: 5px;
+      margin-right: 5px;
       font-size: 15px;
-      position: absolute;
-      top: 10px;
-      right: 45px;
     }
   }
-}
-.history-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: normal;
-  font-size: 16px;
 }
 
 .history-container {

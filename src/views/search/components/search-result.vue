@@ -37,15 +37,25 @@
         <detail-item
           v-for="(item, index) in list"
           :key="index"
-          :data="item"
-        ></detail-item>
+          :id="item.id"
+          :uid="item.user_id"
+          :avatar="item.user_image"
+          :name="item.channel_name"
+          :time="item.createtime"
+          :title="item.title"
+          :content="item.content"
+          :images="item.images"
+          :commentnum="item.num"
+          :cname="item.channel_name"
+          :likenum="item.like_num"
+        />
       </van-list>
     </div>
   </div>
 </template>
 
 <script>
-import detailItem from './search-detail-item'
+import detailItem from '@/components/detail-item'
 import { getResultList, getResultChannels } from '@/api/search'
 
 export default {

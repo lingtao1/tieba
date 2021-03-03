@@ -58,8 +58,17 @@
         <detail-item
           v-for="(item, index) in detailsList"
           :key="index"
-          :data="item"
-        ></detail-item>
+          :id="item.id"
+          :avatar="item.image"
+          :name="item.name"
+          :time="item.createtime"
+          :title="item.title"
+          :content="item.content"
+          :images="item.images"
+          :commentnum="item.comment_num"
+          :cname="item.channel_name"
+          :likenum="item.like_num"
+        />
       </van-list>
 
       <van-empty
