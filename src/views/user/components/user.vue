@@ -44,20 +44,12 @@
 </template>
 
 <script>
-import Bus from '../bus.js'
 export default {
-  props: ['id'],
+  props: ['info'],
   data() {
-    return {
-      info: [],
-    }
+    return {}
   },
   methods: {},
-  created() {
-    Bus.$on('userinfo', (data) => {
-      this.info = data
-    })
-  },
   mounted() {},
 }
 </script>
@@ -77,6 +69,7 @@ export default {
     padding-left: 20px;
 
     .name {
+      min-height: 24px;
       font-size: 16px;
       color: #fff;
     }

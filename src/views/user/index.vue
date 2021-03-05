@@ -17,9 +17,9 @@
         class="nav-bar-warp"
         ref="navbar"
       />
-      <user :id="id" class="user-warp" ref="user" />
+      <user :info="info" class="user-warp" ref="user" />
     </div>
-    <list class="list-warp" :id="id" />
+    <list class="list-warp" :id="id" :info="info" />
   </div>
 </template>
 
@@ -27,8 +27,9 @@
 import user from './components/user'
 import list from './components/list'
 import { getUserInfo } from '@/api/user'
-import Bus from './bus.js'
+
 export default {
+  name: 'userIndex',
   props: ['id'],
   components: {
     user,
@@ -38,6 +39,8 @@ export default {
     return {
       info: [],
       isHide: false,
+      uid: 0,
+      scrollTop: 0,
     }
   },
   methods: {
@@ -48,28 +51,37 @@ export default {
         document.body.scrollTop
       var navbar = this.$refs.navbar.$el
       var user = this.$refs.user.$el
-      // console.log('user', user.scrollHeight, 'windows', scrollTop)
-      // console.log(scrollTop - user.scrollHeight - 46)
-      // navbar.style.opacity = scrollTop - user.scrollHeight - 46 + '%'
-
       scrollTop > 0 ? (this.isHide = true) : (this.isHide = false)
-
       navbar.style.opacity = (scrollTop / (user.scrollHeight - 46)) * 100 + '%'
     },
     async loadUserProfile() {
       const { data } = await getUserInfo({ id: this.id })
       this.info = data
-      Bus.$emit('userinfo', data)
     },
   },
-  created() {
-    this.loadUserProfile()
-  },
+  created() {},
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
   },
-  destroyed() {
-    window.removeEventListener('scroll', this.handleScroll)
+  activated() {
+    var timer = setInterval(() => {
+      document.documentElement.scrollTop = this.scrollTop
+      if (document.documentElement.scrollTop == this.scrollTop) {
+        clearInterval(timer)
+      }
+    })
+    if (this.uid !== this.id) {
+      this.info = []
+      this.isHide = false
+      this.loadUserProfile()
+      this.uid = this.id
+    }
+  },
+  deactivated() {
+    this.scrollTop =
+      window.pageYOffset ||
+      document.documentElement.scrollTop ||
+      document.body.scrollTop
   },
 }
 </script>

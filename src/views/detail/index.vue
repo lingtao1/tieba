@@ -1,6 +1,7 @@
 
 <template>
   <div class="detail-index">
+    <!-- 头部导航条 -->
     <van-nav-bar
       left-arrow
       :border="false"
@@ -18,56 +19,48 @@
         >{{ detailInfo.channel_name }}</van-button
       >
     </van-nav-bar>
+    <!-- /头部导航条 -->
 
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="暂无更多回复"
-      loading-text=" "
-      @load="onLoad"
-      class="comment-list"
-      ref="comment"
-    >
+    <main ref="main">
+      <!-- 主体内容 -->
       <detail-content
         :data="detailInfo"
         :loading="detailloading"
       ></detail-content>
-      <order-bar @onOrder="onOrder" @onCheck="onCheck"></order-bar>
-      <comment
-        v-for="(item, index) in list"
-        :key="index"
-        :data="item"
-        :detailId="detailId"
-      ></comment>
-    </van-list>
+      <!-- /主体内容 -->
 
+      <!-- 回复列表 -->
+      <comment-list :id="detailId" />
+      <!-- /回复列表 -->
+    </main>
+
+    <!-- 底部 -->
     <reply-modular
       :detailId="detailId"
       :isShow="reply_modular"
       @insertComment="insertComment"
       class="footer-bar"
     />
+    <!-- /底部 -->
   </div>
 </template>
 
 <script>
-import comment from './components/comment'
-import orderBar from '@/components/order-bar'
+import commentList from './components/comment-list'
 
 import replyModular from './components/reply-modular'
 import detailContent from './components/detail-content'
 import { mapState } from 'vuex'
-import { getCommentList } from '@/api/comment'
+
 import { getDetail } from '@/api/detail'
 import { debounce } from 'lodash'
 
 export default {
   name: 'detailIndex',
   components: {
-    comment,
+    commentList,
     replyModular,
     detailContent,
-    orderBar,
   },
   props: ['detailId'],
   computed: {
@@ -75,66 +68,21 @@ export default {
   },
   data() {
     return {
-      list: [],
-      loading: false,
-      finished: false,
-      show: false,
-      page: 1,
       detailInfo: [],
       detailloading: true,
-      order: 'asc',
-      isAll: true,
       reply_modular: false,
       scrollTop: 0,
     }
   },
   methods: {
-    async onLoad() {
-      // 异步更新数据
-      var { data } = await getCommentList({
-        id: this.detailId,
-        page: this.page,
-        order: this.order,
-        isAll: this.isAll,
-      })
-
-      this.list.push(...data)
-      this.page++
-      // 加载状态结束
-      this.loading = false
-
-      // 数据全部加载完成
-      if (data.length < 5) {
-        this.finished = true
-      }
-    },
     insertComment($e) {
       this.list.push($e)
     },
-    onOrder($e) {
-      this.order = $e
-      this.page = 1
-      this.list = []
-      this.onLoad()
-      this.finished = false
-      this.loading = true
-    },
-    onCheck($e) {
-      this.isAll = $e
-      this.page = 1
-      this.list = []
 
-      this.onLoad()
-      this.finished = false
-      this.loading = true
-    },
     async loadDetail() {
       const { data } = await getDetail({ id: this.detailId })
       this.detailInfo = data
       this.detailloading = false
-    },
-    onClose() {
-      console.log(this.$refs.closeEL.click())
     },
   },
 
@@ -142,18 +90,24 @@ export default {
     this.loadDetail()
   },
   activated() {
-    this.$refs.comment.$el.scrollTop = this.scrollTop
-  },
-
-  mounted() {
-    const comment = this.$refs.comment.$el
-    comment.addEventListener(
+    const main = this.$refs.main
+    main.scrollTop = this.scrollTop
+    main.addEventListener(
       'scroll',
       debounce(() => {
-        this.scrollTop = comment.scrollTop
+        this.scrollTop = main.scrollTop
       })
     )
+    if (this.detailId != this.id) {
+      this.detailInfo = []
+      this.detailloading = true
+      this.reply_modular = false
+      this.loadDetail()
+      this.id = this.detailId
+    }
   },
+
+  mounted() {},
 }
 </script>
 <style lang='less' scoped>
@@ -163,6 +117,8 @@ export default {
   left: 0;
   right: 0;
   .navbar-detail-info {
+    background: rgb(245, 244, 244);
+    min-width: 40px;
     border: 0;
     border-radius: 5px;
     overflow: hidden;
@@ -175,12 +131,12 @@ export default {
   }
 }
 
-.comment-list {
+main {
   position: fixed;
   top: 46px;
   bottom: 50px;
-  right: 0;
   left: 0;
+  right: 0;
   overflow-y: auto;
 }
 

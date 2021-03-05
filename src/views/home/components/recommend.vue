@@ -24,6 +24,7 @@
         :cname="item.channel_name"
         :likenum="item.like_num"
         :likestate="item.like_state"
+        @clickLike="clickLike(index)"
       />
     </van-list>
   </div>
@@ -57,6 +58,11 @@ export default {
       if (data.length < 5) {
         this.finished = true
       }
+    },
+    clickLike(index) {
+      const item = this.list[index]
+      item.like_state ? item.like_num-- : item.like_num++
+      item.like_state = !item.like_state
     },
   },
   created() {},

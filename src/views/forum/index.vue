@@ -1,6 +1,6 @@
 
 <template>
-  <div class="forumIndex">
+  <div class="forumIndex" ref="forum">
     <div class="bg" ref="bg">
       <van-nav-bar
         ref="navbar"
@@ -59,6 +59,7 @@
           v-for="(item, index) in detailsList"
           :key="index"
           :id="item.id"
+          :uid="item.user_id"
           :avatar="item.image"
           :name="item.name"
           :time="item.createtime"
@@ -68,6 +69,8 @@
           :commentnum="item.comment_num"
           :cname="item.channel_name"
           :likenum="item.like_num"
+          :likestate="item.like_state"
+          @clickLike="clickLike(index)"
         />
       </van-list>
 
@@ -125,6 +128,8 @@ export default {
       page: 1,
       noDetails: false,
       finishedText: '没有更多了',
+      scrollTop: 0,
+      id: null,
     }
   },
   methods: {
@@ -164,7 +169,6 @@ export default {
         document.body.scrollTop
       var bg = this.$refs.bg
       scrollTop > 0 ? (this.isiconSHow = false) : (this.isiconSHow = true)
-
       this.$refs.navbar.$el.style.opacity =
         (scrollTop / (bg.scrollHeight - 46)) * 100 + '%'
     },
@@ -172,18 +176,46 @@ export default {
       await followChannel({ id: this.channelInfo.id })
       this.channelInfo.isFollow = !this.channelInfo.isFollow
     },
+    clickLike(index) {
+      const item = this.detailsList[index]
+      item.like_state ? item.like_num-- : item.like_num++
+      item.like_state = !item.like_state
+    },
   },
 
-  created() {
-    this.loadChannelInfo()
-  },
+  created() {},
   mounted() {
-    this.$nextTick(() => {
-      window.addEventListener('scroll', this.handleScroll)
-    })
+    window.addEventListener('scroll', this.handleScroll)
   },
-  destroyed() {
-    // window.removeEventListener('scroll', this.handleScroll)
+  activated() {
+    var timeout = setInterval(() => {
+      document.documentElement.scrollTop = this.scrollTop
+      if (this.scrollTop == document.documentElement.scrollTop) {
+        clearInterval(timeout)
+      }
+    })
+
+    if (this.id !== this.forumId) {
+      this.isiconSHow = true
+      this.show = false
+      this.channelInfo = false
+      this.detailsList = []
+      this.loading = false
+      this.finished = false
+      this.page = 1
+      this.noDetails = false
+      this.finishedText = '没有更多了'
+      this.scrollTop = 0
+      this.id = null
+      this.loadChannelInfo()
+      this.onLoad()
+      this.id = this.forumId
+    }
+  },
+
+  deactivated() {
+    this.scrollTop = document.documentElement.scrollTop
+    // console.log('deactivated', this.scrollTop)
   },
 }
 </script>

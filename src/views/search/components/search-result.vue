@@ -40,7 +40,7 @@
           :id="item.id"
           :uid="item.user_id"
           :avatar="item.user_image"
-          :name="item.channel_name"
+          :name="item.user_name"
           :time="item.createtime"
           :title="item.title"
           :content="item.content"
@@ -48,6 +48,7 @@
           :commentnum="item.num"
           :cname="item.channel_name"
           :likenum="item.like_num"
+          @clickLike="clickLike(index)"
         />
       </van-list>
     </div>
@@ -96,6 +97,11 @@ export default {
         keyword: this.value,
       })
       this.channels = data
+    },
+    clickLike(index) {
+      const item = this.list[index]
+      item.like_state ? item.like_num-- : item.like_num++
+      item.like_state = !item.like_state
     },
   },
   created() {

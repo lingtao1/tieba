@@ -32,6 +32,7 @@
       :num="data.reply_num"
       @click.native="$router.push(`/detail/${detailId}/comment/${data.id}`)"
     ></reply-item>
+
     <van-popup
       v-model="replyItemModuleShow"
       :style="{ width: '100%' }"

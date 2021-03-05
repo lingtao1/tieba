@@ -8,13 +8,11 @@
         type="text"
         placeholder="写评论..."
         class="reply-input"
-        @blur="onBlur"
-        @click="onClickInput"
         ref="input"
       />
     </form>
     <van-button
-      v-show="isShowInput"
+      v-show="this.message.trim()"
       type="info"
       size="mini"
       class="reply-submit"
@@ -34,8 +32,6 @@ export default {
   data() {
     return {
       message: '',
-      isInput: false,
-      isShowInput: false,
     }
   },
   methods: {
@@ -52,16 +48,9 @@ export default {
         this.$refs.input.$el.getElementsByTagName('input')[0].blur()
         this.message = ''
       } catch (err) {
-        this.$toast.fail('网络或服务器端错误，请稍后再尝试！')
+        // this.$toast.fail('网络或服务器端错误，请稍后再尝试！')
       }
     },
-    onClickInput() {
-      this.isShowInput = true
-      this.$refs.input.$el.getElementsByTagName('input')[0].focus()
-    },
-    onBlur: debounce(function () {
-      this.isShowInput = false
-    }, 200),
   },
   created() {},
   mounted() {},
@@ -71,9 +60,6 @@ export default {
       handler: function (val) {
         val.trim() == '' ? (this.isInput = true) : (this.isInput = false)
       },
-    },
-    isShow(val) {
-      this.$refs.input.$el.getElementsByTagName('input')[0].blur()
     },
   },
 }

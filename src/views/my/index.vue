@@ -97,6 +97,7 @@ export default {
   },
   methods: {
     async loadUserProfile() {
+      if (!this.user) return false
       const { data } = await getUserProfile()
       this.userInfo = data
     },
@@ -110,9 +111,6 @@ export default {
   },
   computed: {
     ...mapState(['user']),
-  },
-  created() {
-    this.loadUserProfile()
   },
   activated() {
     if (this.user) {

@@ -2,9 +2,13 @@
 import axios from 'axios'
 import JSONbig from 'json-bigint'
 import store from '@/store/'
+import router from '@/router'
+import Cookies from 'js-cookie'
+
 
 import Vue from 'vue';
-import { Toast } from 'vant';
+import { Toast,Dialog  } from 'vant';
+
 
 Vue.use(Toast);
 
@@ -47,12 +51,67 @@ request.interceptors.request.use(config => {
     // 对请求错误做些什么
     return Promise.reject(error);
   });
+   request.interceptors.response.use(
+     config => {
+      if(config.status){
+        showLoading().clear()
+      }
+      return config;
+    },
+  )
 
-  request.interceptors.response.use(config => {
-    if(config.status){
+  request.interceptors.response.use(
+    response => {
+      return response
+    },
+    error => {
+      const { status } = error.response
       showLoading().clear()
+      switch (status) {
+        case 401:
+          // 返回 401 清除token信息并跳转到登录页面
+          store.commit('setUser', null)
+          Cookies.remove('token')
+          Dialog.confirm({
+            title: '用户未登录',
+            confirmButtonText:'前往登录'
+          })
+          .then(() => {
+            router.replace({
+              path: '/my'
+            })
+          })
+          .catch(() => {
+
+          });
+          break;
+        case 403:
+          store.commit('setUser', null)
+          Cookies.remove('token')
+          Dialog.confirm({
+            title: '当前用户登录信息无效，请重新登录',
+            confirmButtonText:'前往登录'
+          })
+          .then(() => {
+            router.replace({
+              path: '/my'
+            })
+          })
+          .catch(() => {
+
+          });
+          break;
+        default:
+          showLoading().clear()
+          Toast.fail({
+            message: '发生了些错误',
+            forbidClick: true,
+          })
+
+      }
     }
-    return config;
-  })
+
+    
+  )
 
 export default request

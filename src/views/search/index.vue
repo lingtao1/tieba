@@ -39,7 +39,7 @@ import searchResult from './components/search-result'
 import searchSuggest from './components/search-suggest'
 
 export default {
-  name: 'search-index',
+  name: 'searchIndex',
   components: {
     searchHistory,
     searchResult,

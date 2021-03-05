@@ -21,7 +21,6 @@
           animation="100"
           @start="onStart"
           @end="deteleDisabled = false"
-          @update="onUpdate"
           :disabled="disabled"
         >
           <transition-group>
@@ -70,9 +69,7 @@ export default {
       console.log(e)
       this.deteleDisabled = true
     },
-    onUpdate() {
-      console.log(this.channel)
-    },
+
     edit() {
       this.isEditShow = true
       this.disabled = false
@@ -84,19 +81,16 @@ export default {
       this.deteleDisabled = true
     },
     async loadChannel() {
-      try {
-        const { data } = await getFollowChannel()
-        this.channel = data
-        this.loading = false
-      } catch (err) {
-        this.isErrorShow = true
-      }
+      const { data } = await getFollowChannel()
+      this.channel = data
+      this.loading = false
     },
   },
-  created() {
+  created() {},
+  mounted() {},
+  activated() {
     this.loadChannel()
   },
-  mounted() {},
 }
 </script>
 <style lang='less' scoped>

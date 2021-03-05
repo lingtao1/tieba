@@ -1,7 +1,7 @@
 
 <template>
-  <div class="detail-item" @click="$router.push(`/detail/${id}`)">
-    <van-cell :border="false" >
+  <div class="detail-item" @click.stop="$router.push(`/detail/${id}`)">
+    <van-cell :border="false">
       <van-image
         slot="icon"
         class="avatar"
@@ -15,7 +15,7 @@
         {{ time | relativeTime }}
       </p>
     </van-cell>
-    <div class="detail-content" >
+    <div class="detail-content">
       <p class="title">{{ title }}</p>
       <p class="text">
         {{ content }}
@@ -34,7 +34,7 @@
         />
       </div>
     </div>
-    <div v-if="cname" class="ops" >
+    <div v-if="cname" class="ops">
       <van-button
         class="bar-name"
         type="info"
@@ -43,7 +43,7 @@
         >{{ cname }}</van-button
       >
       <div class="info">
-        <i class="chat" >
+        <i class="chat">
           <van-icon name="chat-o" />
           <span> {{ commentnum }}</span>
         </i>
@@ -54,15 +54,15 @@
       </div>
     </div>
 
-    <div  v-else class="ops" >
+    <div v-else class="ops">
       <div class="ops-item iconfont" name="share-o">&#xe6d1;</div>
       <p class="ops-item ops-item-flex">
         <span class="iconfont">&#xe609; </span>
         <span class="text">{{ commentnum }}</span>
       </p>
       <p class="ops-item ops-item-flex icon-godjob" @click.stop="onClickLike">
-        <span class="iconfont">{{likestate ? '&#xe600' : '&#xe601'}} </span>
-        <span class="text">{{ likenum || 120 }}</span>
+        <span class="iconfont">{{ likestate ? '&#xe600;' : '&#xe601;' }} </span>
+        <span class="text">{{ likenum }}</span>
       </p>
     </div>
   </div>
@@ -96,10 +96,8 @@ export default {
   },
   methods: {
     async onClickLike() {
-      console.log(1)
-      // await likeDetail({ id: this.id })
-      this.likestate ? this.likenum-- : this.likenum++
-      this.likestate = !this.likestate
+      const { data } = await likeDetail({ id: this.id })
+      this.$emit('clickLike')
     },
     onClickImage(index) {
       ImagePreview({ images: this.images, startPosition: index })

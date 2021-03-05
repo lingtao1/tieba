@@ -29,6 +29,7 @@ export default {
       loading: false,
       finished: false,
       page: 1,
+      uid: 0,
     }
   },
   methods: {
@@ -46,6 +47,16 @@ export default {
     },
   },
   created() {},
+  activated() {
+    if (this.uid !== this.id) {
+      this.list = []
+      this.loading = false
+      this.finished = false
+      this.page = 1
+      this.onLoad()
+      this.uid = this.id
+    }
+  },
 }
 </script>
 <style lang='less' scoped>

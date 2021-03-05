@@ -88,10 +88,11 @@ export default {
       await deteleHistory({ id })
     },
   },
-  created() {
+  created() {},
+  mounted() {},
+  activated() {
     this.loadHistory()
   },
-  mounted() {},
 }
 </script>
 <style lang='less' scoped>

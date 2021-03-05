@@ -3,10 +3,10 @@
   <div class="list">
     <van-tabs class="tabs-warp" v-model="active" swipeable animated>
       <van-tab title="主页">
-        <user-post v-bind="$attrs" :info="info" />
+        <user-post :info="info" :id="id" />
       </van-tab>
       <van-tab title="帖子">
-        <user-post v-bind="$attrs" :info="info" />
+        <user-post :info="info" :id="id" />
       </van-tab>
     </van-tabs>
   </div>
@@ -14,24 +14,19 @@
 
 <script>
 import userPost from './user-post'
-import Bus from '../bus'
 
 export default {
+  props: ['info', 'id'],
   components: {
     userPost,
   },
   data() {
     return {
       active: 1,
-      info: [],
     }
   },
   methods: {},
-  created() {
-    Bus.$on('userinfo', (data) => {
-      this.info = data
-    })
-  },
+  created() {},
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
   },

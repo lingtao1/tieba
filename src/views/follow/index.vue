@@ -65,6 +65,7 @@ export default {
 
   created() {},
   mounted() {},
+  activated() {},
 }
 </script>
 <style lang='less' scoped>
