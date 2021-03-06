@@ -160,7 +160,6 @@ export default {
     },
     async insertDetail($e) {
       const { data } = await getDetail({ id: $e })
-      this.detailsList.unshift(data)
     },
     handleScroll() {
       var scrollTop =
@@ -173,7 +172,7 @@ export default {
         (scrollTop / (bg.scrollHeight - 46)) * 100 + '%'
     },
     async onFollow() {
-      await followChannel({ id: this.channelInfo.id })
+      const { data } = await followChannel({ id: this.channelInfo.id })
       this.channelInfo.isFollow = !this.channelInfo.isFollow
     },
     clickLike(index) {
@@ -196,17 +195,7 @@ export default {
     })
 
     if (this.id !== this.forumId) {
-      this.isiconSHow = true
-      this.show = false
-      this.channelInfo = false
-      this.detailsList = []
-      this.loading = false
-      this.finished = false
-      this.page = 1
-      this.noDetails = false
-      this.finishedText = '没有更多了'
-      this.scrollTop = 0
-      this.id = null
+      Object.assign(this.$data, this.$options.data())
       this.loadChannelInfo()
       this.onLoad()
       this.id = this.forumId

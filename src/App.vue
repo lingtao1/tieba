@@ -13,12 +13,16 @@ import { mapState } from 'vuex'
 
 export default {
   data() {
-    return { transitionName: '' }
+    return {
+      transitionName: '',
+      isLoad: true,
+    }
   },
   computed: {
     ...mapState(['cachePages']),
   },
   mounted() {},
+  methods: {},
   watch: {
     //使用watch 监听$router的变化
     $route(to, from) {

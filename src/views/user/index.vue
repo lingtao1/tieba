@@ -71,8 +71,7 @@ export default {
       }
     })
     if (this.uid !== this.id) {
-      this.info = []
-      this.isHide = false
+      Object.assign(this.$data, this.$options.data())
       this.loadUserProfile()
       this.uid = this.id
     }

@@ -201,7 +201,7 @@ export default {
     align-items: center;
     justify-content: center;
     .text {
-      margin-left: 3px;
+      padding-left: 10px;
       font-size: 15px;
     }
   }

@@ -4,7 +4,7 @@ module.exports = {
         proxy:{
             '/index': {     //这里最好有一个 /
             target: 'http://120.25.212.190:81/tp/public/index.php',  // 后台接口域名
-            // target: 'http://localhost/tp/public/index.php', 
+            //target: 'http://localhost/tp/public/index.php', 
             // ws: false,        //如果要代理 websockets，配置这个参数
             // secure: false,  // 如果是https接口，需要配置这个参数
             changeOrigin: true,  //是否跨域

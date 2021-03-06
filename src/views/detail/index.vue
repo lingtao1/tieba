@@ -41,6 +41,7 @@
       @insertComment="insertComment"
       class="footer-bar"
     />
+
     <!-- /底部 -->
   </div>
 </template>
@@ -78,7 +79,6 @@ export default {
     insertComment($e) {
       this.list.push($e)
     },
-
     async loadDetail() {
       const { data } = await getDetail({ id: this.detailId })
       this.detailInfo = data
@@ -86,10 +86,14 @@ export default {
     },
   },
 
-  created() {
-    this.loadDetail()
-  },
+  created() {},
+  mounted() {},
   activated() {
+    if (this.id !== this.detailId) {
+      Object.assign(this.$data, this.$options.data())
+      this.id = this.detailId
+    }
+    this.loadDetail()
     const main = this.$refs.main
     main.scrollTop = this.scrollTop
     main.addEventListener(
@@ -98,16 +102,7 @@ export default {
         this.scrollTop = main.scrollTop
       })
     )
-    if (this.detailId != this.id) {
-      this.detailInfo = []
-      this.detailloading = true
-      this.reply_modular = false
-      this.loadDetail()
-      this.id = this.detailId
-    }
   },
-
-  mounted() {},
 }
 </script>
 <style lang='less' scoped>
@@ -134,7 +129,7 @@ export default {
 main {
   position: fixed;
   top: 46px;
-  bottom: 50px;
+  bottom: 0;
   left: 0;
   right: 0;
   overflow-y: auto;
@@ -144,5 +139,7 @@ main {
   position: fixed;
   align-items: center;
   bottom: 0;
+  right: 0;
+  left: 0;
 }
 </style>

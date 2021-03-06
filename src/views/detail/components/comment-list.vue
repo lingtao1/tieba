@@ -85,13 +85,8 @@ export default {
   mounted() {},
   activated() {
     if (this.id !== this.save_id) {
-      this.list = []
-      this.loading = false
-      this.finished = false
-      this.show = false
-      this.page = 1
-      this.order = 'asc'
-      this.isAll = true
+      // 初始化数据
+      Object.assign(this.$data, this.$options.data())
       this.onLoad()
       this.save_id = this.id
     }
